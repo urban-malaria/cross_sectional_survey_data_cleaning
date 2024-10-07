@@ -67,7 +67,7 @@ alaria_malaria_screen_duplicates <- Kano_data_malaria_screening_cleaned %>%
 #                     "kano_malaria_malaria_duplicated.csv"))
 
 
-kano_all_data <-  inner_join(Kano_data_hh_individuals_cleaned, 
+kano_all_data  <-  inner_join(Kano_data_hh_individuals_cleaned, 
                         Kano_data_malaria_screening_cleaned, 
                         by = join_by("serial_number",
                                      "repeat_instance", 
@@ -565,7 +565,7 @@ duplicated <- EA_weight_adjusted_tpr %>%
   summarise(total = n()) %>% 
   mutate(ward = case_when(ward.x == 1 ~ "ZANGO", 
                           ward.x == 2 ~ "DORAYI",
-                          ward.x == 4 ~ "FADDE D2", 
+                          ward.x == 4 ~ "FAGGE D2", 
                           ward.x == 5 ~ "GOBIRAWA", 
                           ward.x == 6 ~ "GIGINYU"))
   
@@ -574,7 +574,7 @@ duplicated <- EA_weight_adjusted_tpr %>%
 
 write.csv(duplicated, file.path(cleaned_data_path, metropolis_name,"alleas.ea_names.csv"), row.names = F)  
 
-
+plot(sf::st_read("C:/Users/lml6626/Downloads/GEOPODE_GEOMETRY_EXPORT (6)/boundary_wards_export/boundary_wards_export.shp"))
 
 # write.csv(EA_weight_adjusted_tpr, file.path(cleaned_data_path, metropolis_name,"EA_weight_adjusted_tpr.csv"), row.names = F)  
 
@@ -777,13 +777,12 @@ newdata %>%
          !is.na(ward), ward != "3") %>% 
   ggplot(aes(x = ward, fill = as.factor(rdt_test_result)))+
   geom_bar() +
-  facet_wrap(~settlement_type,  labeller = labeller(settlement_type = c("1" = "formal", "2" = "informal",
-,,                    "3" = "slums")))+
+  facet_wrap(~settlement_type,  labeller = labeller(settlement_type = c("1" = "formal", "2" = "informal", "3" = "slums")))+
   theme_minimal() +
   scale_fill_manual(values = c("1" = "#FFE7E7", "2" = "#B47B84", "3" = "#944E63"), 
                     labels = c("positive", "negative", "undeterminate"))+
   scale_x_discrete(labels = c("1"= "Zango", "2" = "Dorayi", # "3" = "Tundun Wazurchi", 
-,    "4" = "Fagge 2", "5" = "Gobirawa", "6" = "Giginyu"))+
+  "4" = "Fagge 2", "5" = "Gobirawa", "6" = "Giginyu"))+
   labs(title = "Kano age distribution by settlement type", 
        x = "age group", y = "Frequency", fill = "test result")
 

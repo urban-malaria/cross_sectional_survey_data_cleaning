@@ -6,7 +6,7 @@ library(sf)
 library(sp)
 
 
-kano_settlement_type <- read.csv("C:/Users/lml6626/Urban Malaria Proj Dropbox/urban_malaria/data/nigeria/kano_ibadan_epi/EA_data/Copy of kano_eas_coord - kano_eas_coord.csv.csv")
+kano_settlement_type <- read.csv("C:/Users/lml6626/Urban Malaria Proj Dropbox/urban_malaria/data/nigeria/kano_ibadan_epi/EA_data/Old EAs CSV/kano_eas_coord.csv")
 
 split_list <- split(kano_settlement_type, kano_settlement_type$Ward)
 

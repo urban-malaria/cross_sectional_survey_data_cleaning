@@ -68,7 +68,7 @@ ib_men_survey <- ib_men_survey %>%
   dplyr::select(-c(men_common_names))
 
 
-net_insp_common_names <- which(names(ib_household_net_insp) %in% allnames_householdlist)[-1]
+net_insp_common_names <- which(names(ib_household_net_insp) %in% allnames_householdlist)[-c(1, 3)]
 
 ib_household_net_insp <- ib_household_net_insp %>% 
   dplyr::select(-c(net_insp_common_names))
@@ -77,18 +77,35 @@ ib_household_net_insp <- ib_household_net_insp %>%
 
 ib_household_net_insp_mod_hh <- ib_household_net_insp %>% 
   group_by(sn) %>% 
-  mutate(number_nets = max(nh108)) %>% 
-  pivot_wider(names_from = nh108, 
-              values_from = c(nh108a:n113a, n115:number_nets))
+  # mutate(number_nets = max(nh108)) %>%
+  mutate(number_nets = max(redcap_repeat_instance )) %>% 
+  transmute(number_nets,  #redcap_repeat_instance,
+            nh108a_yes = sum(ifelse(nh108a == 1, 1, 0), na.rm = T), 
+            nh108a_no = sum(ifelse(nh108a == 2, 1, 0), na.rm = T), 
+            number_nets = ifelse((nh108a_yes + nh108a_no)!= number_nets,
+                                 (nh108a_yes + nh108a_no), number_nets ), 
+            nh109_yes = sum(ifelse(nh109 == 1, 1, 0), na.rm = T), 
+            nh109_no = sum(ifelse(nh109 == 2, 1, 0), na.rm = T), 
+            nh110_yes = sum(ifelse(nh110 == 1, 1, 0), na.rm = T), 
+            nh110_no = sum(ifelse(nh110 == 2, 1, 0), na.rm = T),
+            nh111_cotton = sum(ifelse(nh111 == 1, 1, 0), na.rm = T), 
+            nh111_synthetic = sum(ifelse(nh111 == 2, 1, 0), na.rm = T), 
+            nh111_others= sum(ifelse(nh111 == 3, 1, 0), na.rm = T), 
+            nh113_yes = sum(ifelse(nh113 == 1, 1, 0), na.rm = T), 
+            nh113_no = sum(ifelse(nh113== 2, 1, 0), na.rm = T), ) %>% 
+  # pivot_wider(names_from = nh108, 
+  #             values_from = c(nh108a:nh113a, nh115:number_nets)) %>% 
+  distinct() %>% 
+  mutate(count = n())
 
 
 
-ib_household_net_insp_mod_ind <- ib_household_net_insp %>% 
-  # to be corrected later 
-  group_by(sn) %>% 
-  mutate(unique_id = paste0(sn,"/",)) %>% 
-  pivot_wider(names_from = nh108, 
-              values_from = c(nh108a:n113, n115:number_nets))
+# ib_household_net_insp_mod_ind <- ib_household_net_insp %>% 
+#   # to be corrected later after adding unique ids 
+#   group_by(sn) %>% 
+#   mutate(unique_id = paste0(sn,"/",)) %>% 
+#   pivot_wider(names_from = nh108, 
+#               values_from = c(nh108a:n113, n115:number_nets))
   
 
 
@@ -98,10 +115,21 @@ ib_household_travelers <- ib_household_travelers %>%
   dplyr::select(-c(travelers_common_names))
 
 
+  
+  
+
+
 visitors_common_names <- which(names(ib_household_visitors) %in% allnames_householdlist)[-1]
 
 ib_household_visitors <- ib_household_visitors %>% 
   dplyr::select(-c(visitors_common_names))
+
+ib_household_visitors_mod <- ib_household_visitors  %>% 
+  group_by(sn) %>% 
+  mutate(number_visitors = n()) %>% 
+  transmute(number_visitors, 
+            v1) %>% 
+  distinct()
 
 
 
@@ -113,9 +141,9 @@ names(ib_men_survey) <- c("sn", paste0("men_", names(ib_men_survey)[-1]))
 long_data_together <- left_join(Ibadan_household_list, ib_household, by = ("sn")) %>% 
   dplyr::left_join(ib_men_survey, by = ("sn")) %>% 
   left_join(ib_women_survey, by = ("sn" )) %>% 
-  left_join(ib_household_net_insp, by = ("sn")) %>% 
-  left_join(ib_household_travelers, by = ("sn")) %>% 
-  left_join(ib_household_visitors, by = ("sn"))
+  left_join(ib_household_net_insp_mod_hh, by = ("sn")) %>% 
+  #left_join(ib_household_travelers, by = ("sn")) %>%  Individual and should be put at the end
+  left_join(ib_household_visitors_mod, by = ("sn"))
 
 
   

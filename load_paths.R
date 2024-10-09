@@ -1,7 +1,7 @@
 
 
 #directory path to dropbox
-Drive <- gsub("Documents", "", Sys.getenv("HOME"))
+Drive <- Sys.getenv("USERPROFILE")
 DriveDir <- file.path(Drive, "Urban Malaria Proj Dropbox", "urban_malaria") 
 
  

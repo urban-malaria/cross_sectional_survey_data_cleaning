@@ -13,7 +13,7 @@ library(progressr)
 library(dplyr)
 
 ShpfilesDir <- file.path(dhsDir,"nigeria/nigeria_ward_boundaries/Nigeria/Nigeria_Wards.shp")
-rasterdir <- file.path(dhsDir, "Raster_files/NGA_population_v2_1_agesex")
+rasterdir <- file.path(dhsDir, "nigeria/Raster_files/NGA_population_v2_1_agesex")
 
 nigeria_shp<- st_read(ShpfilesDir)
 nigeria_shp <- nigeria_shp[!st_is_empty(nigeria_shp), ]
@@ -61,7 +61,6 @@ geo_zone_shapefile <- nigeria_shp %>%
 start_time = Sys.time()
 
 popcount_rasteru1 <- file.path(rasterdir,"Children_U15", "NGA_population_v2_1_agesex_under1.tif")
-
 popcount_datau1 <- raster(popcount_rasteru1)
 popcount_valuesu1 <- raster::extract(popcount_datau1, geo_zone_shapefile,
                                    buffer=buffer, fun=mean, df=TRUE, sp=TRUE)

@@ -1,16 +1,16 @@
-library(dplyr)
-library(tidyr)
-library(stringr)
+rm(list = ls())
 
 
-ib_household_net_insp
+metropolis_name <- "Ibadan"
 
+source("load_paths.R")
 
-View(ib_household_net_insp)
+library(dplyr);library(tidyr);library(stringr)
+
 
 
 all_data <- haven::read_dta(file.path(dhsDir,"nigeria/kano_ibadan_epi/new_field_data/240922_Ibadan_latest_data/ibadan_long_wetseason_household_members.dta"))
-
+ib_household_net_insp <- read_dta(file.path(LuDir, "240922_Ibadan_latest_data", "IB Wet season hhold net inspection.dta" ))
 
 max_splits <- max(str_count(ib_household_net_insp$nh114a, "\\s*(,|AND|and|/|&)\\s*") + 1)
 
@@ -54,14 +54,10 @@ names(net_sleeping_columns_filtered)[grepl("\\.x", names(net_sleeping_columns_fi
 names(net_sleeping_columns_filtered) <- gsub("[^[:alnum:]]", "_", names(net_sleeping_columns_filtered))
 
 
-write_dta(net_sleeping_columns_filtered, "C:/Users/laure/Urban Malaria Proj Dropbox/urban_malaria/data/nigeria/kano_ibadan_epi/new_field_data/240922_Ibadan_latest_data/ibadan_long_wetseason_household_members_with_ind_nets.dta")  
+write_dta(net_sleeping_columns_filtered, file.path(dhsDir, "data/nigeria/kano_ibadan_epi/new_field_data/240922_Ibadan_latest_data/ibadan_long_wetseason_household_members_with_ind_nets.dta") ) 
  
 
 
 
-
-
-# net_sleeping_columns <- left_join(all_data, ib_household_slept_net_melted, by = c("sn" = "sn", 
-#                                                                                   "hl1" ="new_line_number"))
 
 

@@ -2,6 +2,10 @@ warning(-1)
 
 library(haven);library(labelled)
 
+metropolis_name <- "Ibadan"
+
+source("load_paths.R")
+
 LuDir <- file.path(Drive,"Urban Malaria Proj Dropbox/urban_malaria/data/nigeria/kano_ibadan_epi/new_field_data")
 
 # data paths 

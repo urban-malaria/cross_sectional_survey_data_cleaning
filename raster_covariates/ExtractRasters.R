@@ -57,21 +57,16 @@ geo_zone_shapefile <- nigeria_shp %>%
   filter(StateCode %in% c("KN", "OY"))
 
 
-start_time = sys.time()
+start_time = Sys.time()
 
-
-
-
-popcount_rasteru1 <- file.path(rasterdir, "NGA_population_v2_1_agesex_under1.tif")
+popcount_rasteru1 <- file.path(rasterdir,"Children_U15", "NGA_population_v2_1_agesex_under1.tif")
 
 popcount_datau1 <- raster(popcount_rasteru1)
 popcount_valuesu1 <- raster::extract(popcount_datau1, geo_zone_shapefile,
                                    buffer=buffer, fun=mean, df=TRUE, sp=TRUE)
 popcount_values_dfu1 <- as.data.frame(popcount_valuesu1)
 
-
-
-end_time = sys.time()
+end_time = Sys.time()
 
 run_time = end_time - start_time 
 

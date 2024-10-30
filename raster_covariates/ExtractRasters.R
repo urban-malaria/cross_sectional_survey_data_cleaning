@@ -53,6 +53,7 @@ ggplot(geo_zone_shapefile)+
 st_write(geo_zone_shapefile, file.path(dhsDir,"nigeria/kano_ibadan_epi/new_field_data/Kano Wet Season Data Sept. 2024/geopolitical_zone_shapefile.shp"))
 ##################################################
 
+###filtering by Kano and Ibadan Only
 geo_zone_shapefile <- nigeria_shp %>%
   filter(StateCode %in% c("KN", "OY"))
 
@@ -93,7 +94,7 @@ popcount_values_dfu15 <- as.data.frame(popcount_values)
 
 #Male
 
-popcount_rasterm0 <- file.path(rasterdir,"Children_U15", "NGA_population_v2_1_agesex_m0.tif")
+popcount_rasterm0 <- file.path(rasterdir,"Male", "NGA_population_v2_1_agesex_m0.tif")
 
 popcount_datam0 <- raster(popcount_rasterm0)
 popcount_valuesm0 <- raster::extract(popcount_datam0, geo_zone_shapefile,

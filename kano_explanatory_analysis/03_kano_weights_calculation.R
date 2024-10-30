@@ -13,25 +13,7 @@ kano_hh_listed <- rbind(kano_hh_listed_00, kano_hh_listed_01)
 
 
 
-# View(kano_hh_listed %>% 
-#        group_by(`EA Serial Number`) %>% 
-#        transmute(Ward, total = n()))
-
-
-# hh_listed <- kano_hh_listed %>% 
-#   dplyr::select(`Enumeration Area`, `EA Serial Number`, `EA Serial Number`, 
-#                 Ward) %>%
-# distinct()
-
-
 kano_hh_sampled <- read_excel(file.path(dropbox, "KN_sampled_HHs_2024.xlsx"))
-
-
-# hh-sampled <- kano_hh_sampled %>% 
-#   dplyr::select(settlement, ward, enumerationarea, 
-#                 easerialnumber) %>%
-#   mutate(new_ea_name = paste0(enumerationarea, "/", easerialnumber))
-#   distinct()
 
 
 
@@ -94,23 +76,14 @@ selected_household <- kano_hh_sampled %>%
   ungroup()
 
 
+
 all_eas <- selected_household %>% 
   dplyr::select(ward, enumerationarea, easerialnumber, settlement) %>% 
   group_by(ward, enumerationarea, easerialnumber, settlement) %>% 
   summarise(total = n(), 
             ea_name = paste0(enumerationarea[1], "/", easerialnumber[1]))
   
-# write.csv(all_eas,
-#           file.path(cleaned_data, metropolis_name,
-#                     "duplicated_data",
-#                     "all_eas_96.csv"))
 
-# check <- read.csv(file.path(cleaned_data, metropolis_name,
-#                     "duplicated_data",
-#                     "check.csv"))
-          
-
-# View(all_eas)
 
 # correct up to this points
 
@@ -119,31 +92,14 @@ all_selected_hh <- inner_join(listed_households,
                               selected_household, 
                               by = c( "index" = "_index")) %>% 
   mutate(prob_selected_hh_structure = total_hh_selected_structure/total_hh_listed_structure)
+
+
 # need clarity on the probability I am getting some are greater than one.
 
 
 # View(all_selected_hh %>% dplyr::select(total_hh_selected_structure, total_hh_in_structure, 
 #                                        total_hh_listed_structure,total_hh_in_structure,
 #                                        prob_selected_hh_structure))
-
-
-
-weights_data <- all_selected_hh %>% 
-  mutate(enumeration_area = paste0(toupper(enumerationarea), "/", easerialnumber), 
-         enumeration_area = str_replace_all(enumeration_area, "[ ,]", "")) %>% 
-  inner_join(kano_hh_sampled_eanames) %>% 
-  dplyr::select(longitude, latitude, ward = ward.x, index,
-                enumeration_area, ea_names, ea_serial_number, hh_serial_number, 
-                structure_serial_number,prob_selected_ward, 
-                prob_selected_eas_settlement,
-                prob_selected_hh_structure)
-
-
-
-write.csv(weights_data, file.path(dropbox, "kano_weights_data.csv"))
-
-write.csv(all_selected_hh, file.path(dropbox, "kano_all_selected_hh.csv"))
-
 
 
 
@@ -156,9 +112,10 @@ kano_hh_sampled00 <- kano_hh_sampled %>%
 
 ea_names <- unique(kano_hh_sampled00$enumeration_area)
 
-write.csv(ea_names, file.path(dropbox, "ea_names.csv"))
+# write.csv(ea_names, file.path(dropbox, "ea_names.csv"))
 
-corrected_EAS = read.csv("C:/Users/lml6626/Downloads/corrections_done (1).csv")
+corrected_EAS = read.csv("C:/Users/laure/Downloads/corrections_done.csv")
+
 
 kano_hh_sampled_eanames <- kano_hh_sampled00 %>% 
   dplyr::select(easerialnumber, enumerationarea, enumeration_area) %>% 
@@ -166,6 +123,24 @@ kano_hh_sampled_eanames <- kano_hh_sampled00 %>%
   distinct()
 
 
+
+
+weights_data <- all_selected_hh %>% 
+  mutate(enumeration_area = paste0(toupper(enumerationarea), "/", easerialnumber), 
+         enumeration_area = str_replace_all(enumeration_area, "[ ,]", "")) %>% 
+  left_join(kano_hh_sampled_eanames, by = c("easerialnumber" = "easerialnumber")) %>% 
+  dplyr::select(longitude, latitude, ward = ward.x, index,
+                #enumeration_area.y, 
+                ea_names, ea_serial_number, hh_serial_number, 
+                structure_serial_number,prob_selected_ward, 
+                prob_selected_eas_settlement,
+                prob_selected_hh_structure) %>% distinct()
+
+
+
+write.csv(weights_data, file.path(dropbox, "kano_weights_data_v01.csv"))
+
+write.csv(all_selected_hh, file.path(dropbox, "kano_all_selected_hh.csv"))
 
 
 write.csv(ib_hh_sampled_eas, file.path(NuDir, "ib_hh_sampled_eas.csv"))

@@ -151,6 +151,11 @@ modified_merged_dataset_mod <- modified_merged_dataset_mod[!duplicated(modified_
 
 write.csv(modified_merged_dataset_mod, file.path(cleaned_data_path, metropolis_name,"kano_malaria_weighted_information_v00.csv")) 
 
+write_dta(modified_merged_dataset_mod, file.path(dhsDir,"nigeria/kano_ibadan_epi/new_field_data/Kano Wet Season Data Sept. 2024/kano_malaria_weighted_information_final.dta"))
+
+
+
+
 coordinates <- modified_merged_dataset_mod %>% 
   dplyr::select(Ward = ward.x, longitude, latitude) %>% 
   distinct()
@@ -482,7 +487,7 @@ newdata %>%
   geom_bar() +
   facet_wrap(~settlement_type,  labeller = labeller(settlement_type = c("1" = "formal", "2" = "informal", "3" = "slums")))+
   theme_minimal() +
-  scale_fill_manual(values = c("1" = "#FFE7E7", "2" = "#B47B84", "3" = "#944E63"), 
+  scale_fill_manual(values = c("1" = "#FFE7E7", "2" = "#B47B84", "3" = "944E63#"), 
                     labels = c("positive", "negative", "undeterminate"))+
   scale_x_discrete(labels = c("1"= "Zango", "2" = "Dorayi", # "3" = "Tundun Wazurchi", 
   "4" = "Fagge 2", "5" = "Gobirawa", "6" = "Giginyu"))+

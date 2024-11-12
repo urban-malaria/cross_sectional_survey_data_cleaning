@@ -70,6 +70,7 @@ end_time = Sys.time()
 
 run_time = end_time - start_time 
 
+print(run_time)
 
 popcount_rasteru5 <- file.path(rasterdir,"Children_U15", "NGA_population_v2_1_agesex_under5.tif")
 
@@ -490,3 +491,56 @@ mergedrastersfemale <-  popcount_values_dfu1 %>%
 write.csv(mergedrastersfemale,file.path(rasterdir,"Male","mergedrasters_females.csv"))
 
   
+
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+
+# Sample data
+data <- data.frame(
+  age_group = rep(c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", 
+                    "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", 
+                    "65-69", "70-74", "75-79", "80+"), 2),
+  gender = rep(c("Male", "Female"), each = 17),
+  population = c(-250000, -200000, -150000, -100000, -50000, -30000, -20000, 
+                 -15000, -10000, -8000, -5000, -3000, -2000, -1000, -500, -300, -100,
+                 250000, 200000, 150000, 100000, 50000, 30000, 20000, 15000, 
+                 10000, 8000, 5000, 3000, 2000, 1000, 500, 300, 100)
+)
+
+# Create the plot
+ggplot(data, aes(x = population, y = age_group, fill = gender)) +
+  geom_bar(stat = "identity") +
+  scale_x_continuous(labels = abs) + # Display positive x-axis labels
+  labs(title = "Oyo Population Pyramid", x = "Population Count", y = "Age Group") +
+  theme_minimal() +
+  scale_fill_manual(values = c("Male" = "blue", "Female" = "pink")) +
+  theme(legend.position = "bottom")
+
+
+
+# Load necessary libraries
+library(raster)
+library(ggplot2)
+library(viridis)
+
+# Step 1: Simulate a population raster (10x10 grid with random values)
+set.seed(42)  # For reproducibility
+pop_density <- raster(nrows=10, ncols=10, xmn=0, xmx=10, ymn=0, ymx=10)
+values(pop_density) <- sample(100:10000, ncell(pop_density), replace=TRUE)
+
+# Convert the raster to a data frame for ggplot
+pop_df <- as.data.frame(pop_density, xy=TRUE)
+colnames(pop_df) <- c("x", "y", "population")
+
+# Step 2: Plot the Population Density Map
+ggplot(pop_df, aes(x = x, y = y, fill = population)) +
+  geom_raster() +
+  scale_fill_viridis_c(option = "plasma", name = "Population") +
+  labs(
+    title = "Simulated Population Density Map for Oyo, Nigeria",
+    x = "Longitude",
+    y = "Latitude"
+  ) +
+  theme_minimal()
+

@@ -4,6 +4,7 @@ rm(list = ls())
 metropolis_name <- "Ibadan"
 
 source("load_paths.R")
+LuDir <- file.path(Drive,"Urban Malaria Proj Dropbox/urban_malaria/data/nigeria/kano_ibadan_epi/new_field_data")
 
 library(dplyr);library(tidyr);library(stringr)
 
@@ -19,14 +20,12 @@ max_splits <- max(str_count(ib_household_net_insp$nh114a, "\\s*(,|AND|and|/|&)\\
 
 # Process the data with corrected separate statements
 ib_household_slept_net <- ib_household_net_insp %>%
-  select(sn, redcap_repeat_instrument, redcap_repeat_instance, nh113, nh113a, nh114, nh114a) %>%
+  dplyr::select(sn, redcap_repeat_instrument, redcap_repeat_instance, nh113, nh113a, nh114, nh114a) %>%
   mutate(nh114a = ifelse(sn == 11010, "1", nh114a),
          nh114a = ifelse(nh114a == "83", "3", nh114a)) %>% 
   separate(nh114, into = paste0("nh114_part", 1:max_splits), sep = ",", fill = "right", extra = "drop") %>%
   separate(nh114a, into = paste0("nh114a_part", 1:max_splits), sep = "\\s*( |,|AND|and|/|&)\\s*", fill = "right", extra = "drop") %>%
-  select(-c(nh114_part1, nh114_part2, nh114_part3, nh114_part4, nh114_part5))
-
-
+  dplyr::select(-c(nh114_part1, nh114_part2, nh114_part3, nh114_part4, nh114_part5))
 
 ib_household_slept_net_melted <- melt(ib_household_slept_net, id.vars = c("sn", "redcap_repeat_instrument", 
                                           "redcap_repeat_instance", "nh113", "nh113a")) 

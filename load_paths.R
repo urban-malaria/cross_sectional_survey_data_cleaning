@@ -26,7 +26,7 @@ pop_count <- file.path(updated_var, "NGA_population_v2_0_gridded")
 
  # only Kano and Ibadan
 
-#metropolis_name <- "Ibadan"
+metropolis_name <- "Kano"
 
 if (metropolis_name == "Kano"){
   
@@ -84,4 +84,17 @@ map_theme <- function(){
         legend.title=element_text(size=18, colour = 'black'),
         legend.text =element_text(size = 18, colour = 'black'),
         legend.key.height = unit(0.65, "cm"))
+}
+
+theme_manuscript <- function(){
+  theme_bw() + 
+    theme(panel.border = element_rect(colour = "black", fill=NA, size=0.5),
+          plot.title = element_text(hjust = 0.5),
+          axis.text.x = element_text(size = 12, color = "black"), 
+          axis.text.y = element_text(size = 12, color = "black"),
+          axis.title.x = element_text(size = 12),
+          axis.title.y = element_text(size =12),
+          legend.title=element_text(size=12, colour = 'black'),
+          legend.text =element_text(size = 12, colour = 'black'),
+          legend.key.height = unit(1, "cm"))
 }

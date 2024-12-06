@@ -468,7 +468,7 @@ newdata %>%
   ggplot(aes(x = agebin, fill = as.factor(settlement_type)))+
   geom_bar() +
   facet_wrap(~ward,  labeller = labeller(ward = c("1" = "Zango", "2" = "Dorayi", "3" = "Tundun Wazurchi", 
-,                        "4" = "Fagge 2", "5" = "Gobirawa", "6" = "Others")))+
+                       "4" = "Fagge 2", "5" = "Gobirawa", "6" = "Others")))+
   theme_minimal() +
   scale_fill_manual(values = c("1" = "#FFE7E7", "2" = "#B47B84", "3" = "#944E63"), 
                     labels = c("formal", "informal","slums"))+

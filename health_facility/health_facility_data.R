@@ -4,9 +4,9 @@ metropolis_name <- "Kano"
 
 source("load_paths.R")
 
-hf_df_allw <- read.csv(file.path(dhsDir, "nigeria", "kano_ibadan_epi", "Field data/HF_data/HFS_data_final_wetseason.csv"))
+#hf_df_allw <- read.csv(file.path(dhsDir, "nigeria", "kano_ibadan_epi", "Field data/HF_data/HFS_data_final_wetseason.csv"))
 
-  
+hf_df_allw <- read.csv(file.path(dhsDir, "nigeria", "kano_ibadan_epi", "Field data/HF_data/HF_data_merged_kn_ib_dryseason.csv"))
   
 nigeria_data <-  file.path(DriveDir,"data","nigeria")
 

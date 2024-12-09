@@ -9,7 +9,7 @@ newdata <- read.csv(newdata, file.path(cleaned_data_path, metropolis_name, "ibad
 
 raster_files <- file.path(dhsDir, "/nigeria/Raster_files")
 
-setlement_tpye = sf::st_read((dhsDir, "nigeria_settlement_classification/blocks_V1.1/Nigeria_Blocks_V1.shp")) %>% 
+setlement_tpye = sf::st_read(file.path(dhsDir, "nigeria_settlement_classification/blocks_V1.1/Nigeria_Blocks_V1.shp")) %>% 
   filter(state == 'Oyo', landuse =='Residential')
 
 

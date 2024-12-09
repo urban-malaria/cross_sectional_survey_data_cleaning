@@ -88,22 +88,32 @@ modified_merged_dataset <- merged_dataset %>%
 
 
 
-coords <- sf::st_coordinates(modified_merged_dataset)
+modified_merged_dataset_updated <- modified_merged_dataset %>% 
+  group_by(ward, bi3, enumeration_area, hh_total, agebin) %>% 
+  mutate(ind_total = n(),
+         prob_ind_hh = 1/ind_total, 
+         ind_weights_hh = 1/prob_ind_hh, 
+         overall_hh_weight  = ind_weights_hh * ward_weight *
+           ea_settlement_weight * hhs_weights) %>% 
+  ungroup() 
 
 
-modified_merged_dataset$longitude <- coords[, 'X']
-modified_merged_dataset$latitude <- coords[, 'Y']
-
-modified_merged_dataset_mod <- modified_merged_dataset%>% 
-  sf::st_drop_geometry()
-
-modified_merged_dataset_mod <- modified_merged_dataset_mod[!duplicated(modified_merged_dataset_mod$unique_id, fromLast = TRUE), ]
-
-write.csv(modified_merged_dataset_mod, file.path(cleaned_data_path, metropolis_name,"kano_malaria_weighted_information_dry_season.csv")) 
-
-write_dta(modified_merged_dataset_mod, file.path(dhsDir,"nigeria/kano_ibadan_epi/new_field_data/Kano Dry Season Data Sept. 2024/kano_malaria_weighted_information_final_dry_season.dta"))
+coords <- sf::st_coordinates(modified_merged_dataset_updated)
 
 
+modified_merged_dataset_updated$longitude <- coords[, 'X']
+modified_merged_dataset_updated$latitude <- coords[, 'Y']
 
-####################################### Making Long data ##################################################
+modified_merged_dataset_mod <- modified_merged_dataset_updated %>% 
+  sf::st_drop_geometry() %>% 
+  sf::st_drop_geometry(geometry.1) %>% 
+  dplyr::select(-geometry.1)
 
+modified_merged_dataset_mod <- modified_merged_dataset_mod[!duplicated(modified_merged_dataset_mod$unique_id, fromLast = TRUE), ] 
+
+write.csv(modified_merged_dataset_mod, file.path(cleaned_data_path, metropolis_name,"kano_malaria_weighted_information_dry_season.csv"), row.names = FALSE) 
+
+# write_dta(modified_merged_dataset_mod, file.path(dhsDir,"nigeria/kano_ibadan_epi/new_field_data/Kano Dry Season Data Sept. 2024/kano_malaria_weighted_information_final_dry_season.dta"))
+
+
+write_dta(modified_merged_dataset_mod, file.path(cleaned_data_path, metropolis_name,"kano_malaria_weighted_information_dry_season.dta"))

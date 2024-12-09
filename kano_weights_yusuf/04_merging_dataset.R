@@ -8,6 +8,8 @@ Maldir <- file.path(dhsDir,"nigeria/kano_ibadan_epi/new_field_data/last_upload_A
 # data paths 
 kano_household_list <- read_dta(file.path(LuDir,"kano_malaria_weighted_information_final_dry_season.dta"))
 
+kano_household_list <- read.csv(file.path(cleaned_data_path, metropolis_name,"kano_malaria_weighted_information_dry_season.csv"))
+
 
 # kn_household_net_insp <- read_dta(file.path(Maldir, "5. KN Wet season household net inspection.dta" ))
 # kn_household_travelers <- read_dta(file.path(Maldir, "3. KN Wet season household travellers.dta" ))
